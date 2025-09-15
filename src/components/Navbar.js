@@ -1,18 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 export default function Navbar({
   title = "Set title here",
   aboutText = "About",
+  mode,
+  handlemode,
 }) {
-//   console.log("Navbar props:", { title, aboutText });
-
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark" data-bs-theme="primary">
+    <nav className={`navbar navbar-expand-lg navbar-${mode} bg-${mode}`}>
       <div className="container-fluid">
-        <a className="navbar-brand" href="/">
+        <Link className="navbar-brand" to="/">
           {title}
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -24,30 +25,38 @@ export default function Navbar({
         >
           <span className="navbar-toggler-icon"></span>
         </button>
+
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active" href="/">
+              <Link className="nav-link active" to="/">
                 Home
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/">
+              <Link className="nav-link" to="/about">
                 {aboutText}
-              </a>
+              </Link>
             </li>
           </ul>
-          <form className="d-flex" role="search">
+
+          {/* Dark Mode Switch */}
+          <div
+            className={`form-check form-switch text-${
+              mode === "light" ? "dark" : "light"
+            }`}
+          >
             <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
+              className="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="switchCheckChecked"
+              onClick={handlemode} // ✅ works fine
             />
-            <button className="btn btn-primary" type="submit">
-              Search
-            </button>
-          </form>
+            <label className="form-check-label" htmlFor="switchCheckChecked">
+              Enable {mode === "light" ? "Dark" : "Light"} Mode
+            </label>
+          </div>
         </div>
       </div>
     </nav>
@@ -57,4 +66,6 @@ export default function Navbar({
 Navbar.propTypes = {
   title: PropTypes.string,
   aboutText: PropTypes.string,
+  mode: PropTypes.string.isRequired,
+  handlemode: PropTypes.func.isRequired,
 };
